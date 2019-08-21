@@ -1,0 +1,45 @@
+{% extends 'dashboard/base.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block head_css %}
+{% endblock %}
+
+{% block head_js %}
+{% endblock %}
+
+{% block content %}
+  <div class="container mt-3 mb-5 pb-5">
+    <h5>Users ({{ reports|length }})</h5>
+    <table class="table table-bordered table-responsive-md small">
+      <thead>
+      <tr>
+        <th>Date Time</th>
+        <th>Location</th>
+        <th>Phone Number</th>
+        <th>Remarks</th>
+        <th>Image</th>
+        <th>Sender</th>
+      </tr>
+      </thead>
+      <tbody>
+      {% for key, user in reports.items %}
+        {% for id, report in user.items %}
+          <tr>
+            <td>{{ report.DateTime }}</td>
+            <td>{{ report.Location }}</td>
+            <td>{{ report.PhoneNumber }}</td>
+            <td>{{ report.Remarks }}</td>
+            <td><img src="{{ report.ReportImageURL }}"></td>
+            <td>{{ report.Sender }}</td>
+          </tr>
+
+        {% endfor %}
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}

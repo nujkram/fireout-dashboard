@@ -1,0 +1,17 @@
+{% load static %}
+<div class="container-fluid nav-wrapper">
+  <div class="container">
+    <nav class="navbar navbar-expand-md">
+      <div class="navbar-brand">
+        <a href="https://pilantropo.com">
+          <img class="" src="{% static 'media/pilantropo-logo-pink.png' %}" alt="FireOut Logo">
+        </a>
+      </div>
+      <ul class="ml-auto navbar-nav">
+        {% if request.user.is_authenticated %}
+          <li class="nav-item"><a class="text-muted" href="{% url 'accounts_logout_view' %}">Logout</a></li>
+        {% endif %}
+      </ul>
+    </nav>
+  </div>
+</div>

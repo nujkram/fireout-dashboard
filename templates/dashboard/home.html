@@ -1,0 +1,40 @@
+{% extends 'dashboard/base.html' %}
+{% load static %}
+
+{% block head_css %}
+{% endblock %}
+
+{% block head_js %}
+{% endblock %}
+
+{% block content %}
+  <div class="container mt-3 mb-5 pb-5">
+    <h5>Users ({{ all_users|length }})</h5>
+    {{ notification }}
+    <table class="table table-bordered table-responsive-md small">
+      <thead>
+      <tr>
+        <th>Email</th>
+        <th>Username</th>
+        <th>Mobile No.</th>
+        <th>Province</th>
+        <th>User Type</th>
+      </tr>
+      </thead>
+      <tbody>
+      {% for key, user in all_users.items %}
+        <tr>
+          <td>{{ user.UserEmail }}</td>
+          <td>{{ user.UserName }}</td>
+          <td>{{ user.UserMobile }}</td>
+          <td>{{ user.UserProvince }}</td>
+          <td>{{ user.UserType }}</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}
