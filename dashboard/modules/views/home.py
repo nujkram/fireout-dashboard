@@ -9,14 +9,14 @@ firebase = pyrebase.initialize_app(settings.FIREBASE_CONFIG)
 auth = firebase.auth()
 db = firebase.database()
 
-live = LiveData(firebase, '/my_data')
-
-data = live.get_data()
-all_data = data.get()
-sub_data = data.get('my/sub/path')
-
-def my_handler(data):
-  print(data)
+# live = LiveData(firebase, '/my_data')
+#
+# data = live.get_data()
+# all_data = data.get()
+# sub_data = data.get('my/sub/path')
+#
+# def my_handler(data):
+#   print(data)
 
 
 class DashboardHomeView(View):
@@ -26,13 +26,13 @@ class DashboardHomeView(View):
     for user in all_firebase_users.each():
       all_users[user.key()] = user.val()
 
-    notification = live.signal('/some/key').connect(my_handler)
+    # notification = live.signal('/some/key').connect(my_handler)
 
     context = {
       'page_title': 'FireOut: Home',
       'location': 'home',
       'all_users': all_users,
-      'notification': notification,
+      # 'notification': notification,
     }
 
     return render(request, 'dashboard/home.html', context)
