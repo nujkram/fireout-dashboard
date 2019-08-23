@@ -1,6 +1,6 @@
 import pyrebase
 from django.conf import settings
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
 from django.views import View
@@ -10,23 +10,27 @@ firebase = pyrebase.initialize_app(settings.FIREBASE_CONFIG)
 
 auth = firebase.auth()
 db = firebase.database()
+#
+# live = LiveData(firebase, '/my_data')
+#
+# data = live.get_data()
+# all_data = data.get()
+# sub_data = data.get('my/sub/path')
+#
+#
+# def my_handler(data):
+#   print(data)
 
-live = LiveData(firebase, '/my_data')
+def noquote(s):
+  return s
 
-data = live.get_data()
-all_data = data.get()
-sub_data = data.get('my/sub/path')
-
-
-def my_handler(data):
-  print(data)
-
+pyrebase.pyrebase.quote = noquote
 
 class DashboardReportView(View):
   def get(self, request, *args, **kwargs):
-    all_firebase_reports = db.child('Reports').get()
+    firebase_reports = db.child('Reports').get()
     reports = {}
-    for report in all_firebase_reports.each():
+    for report in firebase_reports.each():
       reports[report.key()] = report.val()
 
     context = {
@@ -35,4 +39,17 @@ class DashboardReportView(View):
       'reports': reports,
     }
 
-    return render(request, 'dashboard/reports.html', context)
+    return render(request, 'dashboard/reports/home.html', context)
+
+class DashboardReportDetailView(View):
+  def get(self, request, *args, **kwargs):
+    report_id = kwargs['id']
+    firebase_report = db.child('Reports').order_by_key().equal_to(report_id).get()
+
+    context = {
+      'page_title': 'FireOut Report Detail',
+      'location': 'report',
+      'report': firebase_report.val(),
+    }
+
+    return render(request, 'dashboard/reports/detail.html', context)
