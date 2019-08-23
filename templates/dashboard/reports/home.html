@@ -10,7 +10,7 @@
 {% block content %}
   <div class="container mt-3 mb-5 pb-5">
     <h5>Users ({{ reports|length }})</h5>
-    <table id='report_table' class="table table-bordered table-responsive-md small display">
+    <table id="report_table" class="table table-bordered table-responsive-md small display">
       <thead>
       <tr>
         <th>Date Time</th>
@@ -38,9 +38,9 @@
 {% block scripts %}
   <script type="text/javascript">
     $(document).ready(function () {
-
-
-      var table = $("#report_table").DataTable();
+      var table = $("#report_table").DataTable({
+        "iDisplayLength": 20
+      });
 
       table.columns().flatten().each(function (colIdx) {
         // Create the select list and search operation
