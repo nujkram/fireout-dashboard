@@ -8,7 +8,6 @@ INSTALLED_APPS = [
     'django.contrib.humanize',
 
     'debug_toolbar',
-
     'crispy_forms',
 
     'django_extensions',

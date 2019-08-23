@@ -1,0 +1,70 @@
+{% extends 'dashboard/base.html' %}
+{% load static %}
+
+{% block head_css %}
+{% endblock %}
+
+{% block head_js %}
+{% endblock %}
+
+{% block content %}
+  <div class="container mt-3 mb-5 pb-5">
+    <h5>Users ({{ reports|length }})</h5>
+    <table id='report_table' class="table table-bordered table-responsive-md small display">
+      <thead>
+      <tr>
+        <th>Date Time</th>
+        <th>Sender</th>
+        <th>Location</th>
+        <th>Mobile No.</th>
+        <th>Remarks</th>
+      </tr>
+      </thead>
+      <tbody>
+      {% for key, report in reports.items %}
+        <tr>
+          <td><a href="{% url 'dashboard_report_detail_view' key %}" target="_blank">{{ report.DateTime }}</a></td>
+          <td><a href="{% url 'dashboard_report_detail_view' key %}" target="_blank">{{ report.Sender }}</a></td>
+          <td><a href="{% url 'dashboard_report_detail_view' key %}" target="_blank">{{ report.Location }}</a></td>
+          <td><a href="{% url 'dashboard_report_detail_view' key %}" target="_blank">{{ report.PhoneNumber }}</a></td>
+          <td><a href="{% url 'dashboard_report_detail_view' key %}" target="_blank">{{ report.Remarks }}</a></td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endblock %}
+
+{% block scripts %}
+  <script type="text/javascript">
+    $(document).ready(function () {
+
+
+      var table = $("#report_table").DataTable();
+
+      table.columns().flatten().each(function (colIdx) {
+        // Create the select list and search operation
+        var select = $('<select />')
+          .appendTo(
+            table.column(colIdx).footer()
+          )
+          .on('change', function () {
+            table
+              .column(colIdx)
+              .search($(this).val())
+              .draw();
+          });
+
+        // Get the search data for the first column and add to the select list
+        table
+          .column(colIdx)
+          .cache('search')
+          .sort()
+          .unique()
+          .each(function (d) {
+            select.append($('<option value="' + d + '">' + d + '</option>'));
+          });
+      });
+    });
+  </script>
+{% endblock %}
