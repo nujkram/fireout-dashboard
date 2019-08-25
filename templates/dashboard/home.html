@@ -9,14 +9,30 @@
 
 {% block content %}
   <div class="row">
-  <div class="col-md-12 col-sm-12">
-    <div class="card">
-      <h5 class="card-header">Users by Province</h5>
-      <div class="card-body">
-        <canvas id="user-by-province" style="height: 100px;"></canvas>
+    <div class="col-md-9 col-sm-12">
+      <div class="card">
+        <h5 class="card-header">Users by Province</h5>
+        <div class="card-body">
+          <canvas id="user-by-province"></canvas>
+        </div>
       </div>
     </div>
-  </div>
+    <div class="col-md-3 col-sm-12">
+      <table class="table table-bordered table-responsive-md">
+        <thead>
+        <th>Province</th>
+        <th>Count</th>
+        </thead>
+        <tbody>
+        {% for key, province in users_by_province.items %}
+          <tr>
+            <td>{{ province.name }}</td>
+            <td>{{ province.count }}</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
   </div>
   <div class="container mt-3 mb-5 pb-5">
     <h5>Users ({{ all_users|length }})</h5>
