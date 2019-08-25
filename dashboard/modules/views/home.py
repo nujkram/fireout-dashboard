@@ -4,6 +4,8 @@ from django.shortcuts import render
 from django.views import View
 from firebasedata import LiveData
 
+from helpers.analytics import count_user_per_location
+
 firebase = pyrebase.initialize_app(settings.FIREBASE_CONFIG)
 
 auth = firebase.auth()
@@ -21,17 +23,19 @@ db = firebase.database()
 
 class DashboardHomeView(View):
   def get(self, request, *args, **kwargs):
-    all_firebase_users = db.child('Users').get()
-    all_users = {}
-    for user in all_firebase_users.each():
-      all_users[user.key()] = user.val()
+    users_by_province = count_user_per_location()
+    firebase_users = db.child('Users').get()
+    users = {}
 
+    for user in firebase_users.each():
+      users[user.key()] = user.val()
     # notification = live.signal('/some/key').connect(my_handler)
 
     context = {
       'page_title': 'FireOut: Home',
       'location': 'home',
-      'all_users': all_users,
+      'users': users,
+      'users_by_province': users_by_province,
       # 'notification': notification,
     }
 

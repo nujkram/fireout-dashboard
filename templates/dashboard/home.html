@@ -8,6 +8,16 @@
 {% endblock %}
 
 {% block content %}
+  <div class="row">
+  <div class="col-md-12 col-sm-12">
+    <div class="card">
+      <h5 class="card-header">Users by Province</h5>
+      <div class="card-body">
+        <canvas id="user-by-province" style="height: 100px;"></canvas>
+      </div>
+    </div>
+  </div>
+  </div>
   <div class="container mt-3 mb-5 pb-5">
     <h5>Users ({{ all_users|length }})</h5>
     {{ notification }}
@@ -22,7 +32,7 @@
       </tr>
       </thead>
       <tbody>
-      {% for key, user in all_users.items %}
+      {% for key, user in users.items %}
         <tr>
           <td>{{ user.UserEmail }}</td>
           <td>{{ user.UserName }}</td>
@@ -40,8 +50,8 @@
   <script type="text/javascript">
     $(document).ready(function () {
       var table = $("#report_table").DataTable({
-          "iDisplayLength": 20
-        });
+        "iDisplayLength": 20
+      });
 
       table.columns().flatten().each(function (colIdx) {
         // Create the select list and search operation
@@ -65,6 +75,58 @@
           .each(function (d) {
             select.append($('<option value="' + d + '">' + d + '</option>'));
           });
+      });
+
+      function getRandomColor() {
+        var letters = '0123456789ABCDEF'.split('');
+        var color = '#';
+        for (var i = 0; i < 6; i++) {
+          color += letters[Math.floor(Math.random() * 16)];
+        }
+        return color;
+      };
+
+      var userByProvinceData = {
+        labels: [
+          {% for key, province in users_by_province.items %}
+            '{{ province.name }}',
+          {% endfor %}
+        ],
+        datasets: [{
+          data: [
+            {% for key, province in users_by_province.items %}
+              '{{ province.count }}',
+            {% endfor %}
+          ],
+          backgroundColor: [
+            {% for key, province in users_by_province.items %}
+              getRandomColor(),
+            {% endfor %}
+          ],
+        }]
+      };
+
+      var userByProvinceCtx = document.getElementById('user-by-province').getContext('2d');
+      var userByProvinceBar = new Chart(userByProvinceCtx, {
+        type: 'bar',
+        data: userByProvinceData,
+        options: {
+          scales: {
+            yAxes: [{
+              ticks: {
+                beginAtZero: true
+              },
+            }]
+          },
+          responsive: true,
+          legend: {
+            display: false
+          },
+          title: {
+            display: false,
+            text: 'Users by Province'
+          }
+        }
       });
     })
   </script>

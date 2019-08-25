@@ -8,3 +8,5 @@ dashboard/modules/__pycache__/
 dashboard/modules/views/__pycache__/
 
 fireout/__pycache__/
+
+helpers/__pycache__/
