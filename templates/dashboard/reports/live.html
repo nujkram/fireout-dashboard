@@ -39,6 +39,8 @@
 {% block scripts %}
   <script type="text/javascript">
     $(document).ready(function () {
+      let send_alert = false;
+
       function sendAlarm(src) {
         var audioElement = document.getElementById('player-src');
         audioElement.src = src;
@@ -56,6 +58,18 @@
             var reportCount = Object.keys(data).length;
             var soundSrc = "{% static 'audio/fire_alarm.mp3' %}";
             let lastKey;
+            // Check if a new report was added by comparing previous record count to the latest count
+            if (currentReportCount.textContent.toString() !== reportCount.toString()) {
+              sendAlarm(soundSrc);
+              send_alert = true;
+              console.log(currentReportCount.textContent.toString());
+              console.log(reportCount.toString());
+              console.log('Not Equal');
+            } else {
+              console.log(currentReportCount.textContent.toString());
+              console.log(reportCount.toString());
+              console.log('Equal');
+            }
 
             $("#report-count").empty();
             $("#report-count").append(reportCount);
@@ -78,8 +92,7 @@
               )
             });
 
-            // Check if a new report was added by comparing previous record count to the latest count
-            if (currentReportCount.textContent.toString() !== reportCount.toString()) {
+            if (send_alert === true) {
               var report = data[Object.keys(data).sort().pop()];
               var reportLink = document.getElementById('reportLink');
               $("#reportDetail").empty();
@@ -87,12 +100,11 @@
                 "<h4>Name:<strong>" + report.Sender + "</strong></h4><br>" +
                 "<h4>Remarks:<strong>" + report.Remarks + "</strong></h4>"
               );
-              var report_link = "{% url 'dashboard_report_detail_view' 1 %})";
+              var report_link = "{% url 'dashboard_report_detail_view' 1 %}";
               report_link = report_link.replace('1', lastKey);
 
               reportLink.setAttribute("href", report_link);
               $("#alertModal").modal();
-              sendAlarm(soundSrc);
             }
           },
           error: function (data) {
