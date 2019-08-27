@@ -55,11 +55,7 @@
             var currentReportCount = document.getElementById('report-count');
             var reportCount = Object.keys(data).length;
             var soundSrc = "{% static 'audio/fire_alarm.mp3' %}";
-
-            if (currentReportCount.textContent.toString() !== reportCount.toString()) {
-              sendAlarm(soundSrc);
-            } else {
-            }
+            let lastKey;
 
             $("#report-count").empty();
             $("#report-count").append(reportCount);
@@ -73,13 +69,31 @@
               var Location = value.Location;
               var PhoneNumber = value.PhoneNumber;
               var Remarks = value.Remarks;
+              lastKey = key;
 
               $("tbody").append(
                 `<tr><td><a href="` + url + `" target="_blank">` + DateTime + `</a></td><td><a href="` + url + `" target="_blank">` + Sender +
                 `</a></td><td><a href="` + url + `" target="_blank">` + Location + `</a></td><td><a href="` + url + `" target="_blank">` + PhoneNumber +
                 `</a></td><td><a href="` + url + `" target="_blank">` + Remarks + `</a></td></tr>`
               )
-            })
+            });
+
+            // Check if a new report was added by comparing previous record count to the latest count
+            if (currentReportCount.textContent.toString() !== reportCount.toString()) {
+              var report = data[Object.keys(data).sort().pop()];
+              var reportLink = document.getElementById('reportLink');
+              $("#reportDetail").empty();
+              $("#reportDetail").append(
+                "<h4>Name:<strong>" + report.Sender + "</strong></h4><br>" +
+                "<h4>Remarks:<strong>" + report.Remarks + "</strong></h4>"
+              );
+              var report_link = "{% url 'dashboard_report_detail_view' 1 %})";
+              report_link = report_link.replace('1', lastKey);
+
+              reportLink.setAttribute("href", report_link);
+              $("#alertModal").modal();
+              sendAlarm(soundSrc);
+            }
           },
           error: function (data) {
             console.log("Error");
