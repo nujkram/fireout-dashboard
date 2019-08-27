@@ -1,0 +1,92 @@
+{% extends 'dashboard/base.html' %}
+{% load static %}
+
+{% block head_css %}
+{% endblock %}
+
+{% block head_js %}
+{% endblock %}
+
+{% block content %}
+  <div class="container mt-3 mb-5 pb-5">
+    <div class="row">
+      <div class="col-md-6 col-sm-12">
+        <h5>Report (<span id="report-count">{{ reports|length }}</span>)</h5>
+      </div>
+      <div class="col-md-6 col-sm-12">
+        <audio controls id="player" class="float-right">
+          <source id="player-src" src="{% static 'audio/fire_alarm.mp3' %}">
+        </audio>
+      </div>
+    </div>
+
+    <table id="report_table" class="table table-bordered table-responsive-md small">
+      <thead>
+      <tr>
+        <th>Date Time</th>
+        <th>Sender</th>
+        <th>Location</th>
+        <th>Mobile No.</th>
+        <th>Remarks</th>
+      </tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+  </div>
+{% endblock %}
+
+{% block scripts %}
+  <script type="text/javascript">
+    $(document).ready(function () {
+      function sendAlarm(src) {
+        var audioElement = document.getElementById('player-src');
+        audioElement.src = src;
+        var myAudio = document.getElementById('player');
+        myAudio.load();
+        myAudio.play();
+      }
+
+      setInterval(function () {
+        $.ajax({
+          method: "GET",
+          url: "{% url 'dashboard_report_refresh_view' %}",
+          success: function (data) {
+            var currentReportCount = document.getElementById('report-count');
+            var reportCount = Object.keys(data).length;
+            var soundSrc = "{% static 'audio/fire_alarm.mp3' %}";
+
+            if (currentReportCount.textContent.toString() !== reportCount.toString()) {
+              sendAlarm(soundSrc);
+            } else {
+            }
+
+            $("#report-count").empty();
+            $("#report-count").append(reportCount);
+            $("tbody").empty();
+            $.each(data, function (key, value) {
+
+              var url = "{% url 'dashboard_report_detail_view' 1 %}";
+              var url = url.replace('1', key);
+              var DateTime = value.DateTime;
+              var Sender = value.Sender;
+              var Location = value.Location;
+              var PhoneNumber = value.PhoneNumber;
+              var Remarks = value.Remarks;
+
+              $("tbody").append(
+                `<tr><td><a href="` + url + `" target="_blank">` + DateTime + `</a></td><td><a href="` + url + `" target="_blank">` + Sender +
+                `</a></td><td><a href="` + url + `" target="_blank">` + Location + `</a></td><td><a href="` + url + `" target="_blank">` + PhoneNumber +
+                `</a></td><td><a href="` + url + `" target="_blank">` + Remarks + `</a></td></tr>`
+              )
+            })
+          },
+          error: function (data) {
+            console.log("Error");
+            console.log(data);
+          }
+        })
+      }, 10000);
+    });
+  </script>
+{% endblock %}

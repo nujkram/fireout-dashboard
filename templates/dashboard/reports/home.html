@@ -9,18 +9,8 @@
 
 {% block content %}
   <div class="container mt-3 mb-5 pb-5">
-    <div class="row">
-      <div class="col-md-6 col-sm-12">
-        <h5>Report (<span id="report-count">{{ reports|length }}</span>)</h5>
-      </div>
-      <div class="col-md-6 col-sm-12">
-        <audio controls id="player" class="float-right">
-          <source id="player-src" src="{% static 'audio/fire_alarm.mp3' %}">
-        </audio>
-      </div>
-    </div>
-
-    <table id="report_table" class="table table-bordered table-responsive-md small">
+    <h5>Report (<span id="report-count">{{ reports|length }}</span>)</h5>
+    <table id="report_table" class="table table-bordered table-responsive-md small display">
       <thead>
       <tr>
         <th>Date Time</th>
@@ -31,6 +21,15 @@
       </tr>
       </thead>
       <tbody>
+      {% for key, report in reports.items %}
+        <tr>
+          <td><a href="{% url 'dashboard_report_detail_view' key %}" target="_blank">{{ report.DateTime }}</a></td>
+          <td><a href="{% url 'dashboard_report_detail_view' key %}" target="_blank">{{ report.Sender }}</a></td>
+          <td><a href="{% url 'dashboard_report_detail_view' key %}" target="_blank">{{ report.Location }}</a></td>
+          <td><a href="{% url 'dashboard_report_detail_view' key %}" target="_blank">{{ report.PhoneNumber }}</a></td>
+          <td><a href="{% url 'dashboard_report_detail_view' key %}" target="_blank">{{ report.Remarks }}</a></td>
+        </tr>
+      {% endfor %}
       </tbody>
     </table>
   </div>
@@ -39,60 +38,33 @@
 {% block scripts %}
   <script type="text/javascript">
     $(document).ready(function () {
-      function sendAlarm(src) {
-        var audioElement = document.getElementById('player-src');
-        audioElement.src = src;
-        var myAudio = document.getElementById('player');
-        myAudio.load();
-        myAudio.play();
-      }
+      var table = $("#report_table").DataTable({
+        "iDisplayLength": 20
+      });
 
-      setInterval(function () {
-        $.ajax({
-          method: "GET",
-          url: "{% url 'dashboard_report_update_view' %}",
-          success: function (data) {
-            var currentReportCount = document.getElementById('report-count');
-            var reportCount = Object.keys(data).length;
-            var soundSrc = "{% static 'audio/fire_alarm.mp3' %}";
+      table.columns().flatten().each(function (colIdx) {
+        // Create the select list and search operation
+        var select = $('<select />')
+          .appendTo(
+            table.column(colIdx).footer()
+          )
+          .on('change', function () {
+            table
+              .column(colIdx)
+              .search($(this).val())
+              .draw();
+          });
 
-            if (currentReportCount.textContent.toString() !== reportCount.toString()) {
-              console.log(currentReportCount.textContent);
-              console.log(reportCount);
-              console.log("Not Equal");
-              sendAlarm(soundSrc);
-            } else {
-              console.log(currentReportCount.textContent);
-              console.log(reportCount);
-              console.log("Equal");
-            }
-
-            $("#report-count").empty();
-            $("#report-count").append(reportCount);
-            $("tbody").empty();
-            $.each(data, function (key, value) {
-
-              var url = "{% url 'dashboard_report_refresh_view' 1 %}";
-              var url = url.replace('1', key);
-              var DateTime = value.DateTime;
-              var Sender = value.Sender;
-              var Location = value.Location;
-              var PhoneNumber = value.PhoneNumber;
-              var Remarks = value.Remarks;
-
-              $("tbody").append(
-                `<tr><td><a href="` + url + `" target="_blank">` + DateTime + `</a></td><td><a href="` + url + `" target="_blank">` + Sender +
-                `</a></td><td><a href="` + url + `" target="_blank">` + Location + `</a></td><td><a href="` + url + `" target="_blank">` + PhoneNumber +
-                `</a></td><td><a href="` + url + `" target="_blank">` + Remarks + `</a></td></tr>`
-              )
-            })
-          },
-          error: function (data) {
-            console.log("Error");
-            console.log(data);
-          }
-        })
-      }, 10000);
+        // Get the search data for the first column and add to the select list
+        table
+          .column(colIdx)
+          .cache('search')
+          .sort()
+          .unique()
+          .each(function (d) {
+            select.append($('<option value="' + d + '">' + d + '</option>'));
+          });
+      });
     });
   </script>
 {% endblock %}

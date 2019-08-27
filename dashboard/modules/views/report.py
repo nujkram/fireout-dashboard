@@ -34,6 +34,22 @@ class DashboardReportView(View):
     return render(request, 'dashboard/reports/home.html', context)
 
 
+class DashboardReportLiveView(View):
+  def get(self, request, *args, **kwargs):
+    firebase_reports = db.child('Reports').get()
+    reports = {}
+    for report in firebase_reports.each():
+      reports[report.key()] = report.val()
+
+    context = {
+      'page_title': 'FireOut: Live',
+      'location': 'live',
+      'reports': reports,
+    }
+
+    return render(request, 'dashboard/reports/live.html', context)
+
+
 class DashboardReportDetailView(View):
   def get(self, request, *args, **kwargs):
     report_id = kwargs['id']

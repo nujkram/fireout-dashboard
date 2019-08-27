@@ -7,11 +7,6 @@
           <img class="" src="{% static 'media/pilantropo-logo-pink.png' %}" alt="FireOut Logo">
         </a>
       </div>
-      <ul class="ml-auto navbar-nav">
-        {% if request.user.is_authenticated %}
-          <li class="nav-item"><a class="text-muted" href="{% url 'accounts_logout_view' %}">Logout</a></li>
-        {% endif %}
-      </ul>
     </nav>
   </div>
 </div>

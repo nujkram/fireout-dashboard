@@ -9,17 +9,20 @@
     <li class="{% if location == 'home' %}active{% endif %}">
       <a href="{% url 'dashboard_home_view' %}">Home</a>
     </li>
+    <li class="{% if location == 'live' %}active{% endif %}">
+      <a href="{% url 'dashboard_report_live_view' %}">Live Feed</a>
+    </li>
     <li class="{% if location == 'report' %}active{% endif %}">
       <a href="{% url 'dashboard_report_view' %}">Reports</a>
     </li>
   </ul>
 
-{#  <ul class="list-unstyled CTAs">#}
-{#    <li>#}
-{#      <a href="https://bootstrapious.com/tutorial/files/sidebar.zip" class="download">Download source</a>#}
-{#    </li>#}
-{#    <li>#}
-{#      <a href="https://bootstrapious.com/p/bootstrap-sidebar" class="article">Back to article</a>#}
-{#    </li>#}
-{#  </ul>#}
+  {#  <ul class="list-unstyled CTAs">#}
+  {#    <li>#}
+  {#      <a href="https://bootstrapious.com/tutorial/files/sidebar.zip" class="download">Download source</a>#}
+  {#    </li>#}
+  {#    <li>#}
+  {#      <a href="https://bootstrapious.com/p/bootstrap-sidebar" class="article">Back to article</a>#}
+  {#    </li>#}
+  {#  </ul>#}
 </nav>
