@@ -1,7 +1,9 @@
 {% load static %}
 <nav id="sidebar">
   <div class="sidebar-header">
-    <h3>Fireout</h3>
+    <a href="{% url 'dashboard_home_view' %}">
+      <img class="img-fluid" src="{% static 'img/fireout-6.png' %}" alt="FireOut Logo">
+    </a>
   </div>
 
   <ul class="list-unstyled components">
