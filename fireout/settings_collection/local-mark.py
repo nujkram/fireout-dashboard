@@ -68,6 +68,8 @@ MIDDLEWARE = [
   'django.contrib.auth.middleware.AuthenticationMiddleware',
   'django.contrib.messages.middleware.MessageMiddleware',
   'django.middleware.clickjacking.XFrameOptionsMiddleware',
+  'corsheaders.middleware.CorsMiddleware',
+  'django.middleware.common.CommonMiddleware',
   'django.middleware.locale.LocaleMiddleware',
   'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
@@ -138,7 +140,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "static")
+  os.path.join(BASE_DIR, "static")
 ]
 
 STATIC_URL = 'http://192.168.33.30/static/'
@@ -147,14 +149,24 @@ STATIC_ROOT = '/var/www/html/static/'
 MEDIA_URL = 'http://192.168.33.30/media/'
 MEDIA_ROOT = '/var/www/html/media/'
 
+CORS_ORIGIN_ALLOW_ALL = True
+
+CORS_ALLOW_CREDENTIALS = True
+
+REST_FRAMEWORK = {
+  'DEFAULT_AUTHENTICATION_CLASSES': (
+    'rest_framework.authentication.SessionAuthentication',
+  ),
+}
+
 # firebase
 FIREBASE_CONFIG = {
-    'apiKey': 'AIzaSyBcrTQnvu9pwY-o3vQLTnUq42tWQLCOmD4 ',
-    'authDomain': 'https://fireout-7e5dc.firebaseapp.com',
-    'databaseURL': 'https://fireout-7e5dc.firebaseio.com',
-    'projectId': 'fireout-7e5dc',
-    'storageBucket': 'fireout-7e5dc.appspot.com',
-    # 'messagingSenderId': '',
+  'apiKey': 'AIzaSyBcrTQnvu9pwY-o3vQLTnUq42tWQLCOmD4',
+  'authDomain': 'https://fireout-7e5dc.firebaseapp.com',
+  'databaseURL': 'https://fireout-7e5dc.firebaseio.com',
+  'projectId': 'fireout-7e5dc',
+  'storageBucket': 'fireout-7e5dc.appspot.com',
+  'messagingSenderId': '527618515359',
 }
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'

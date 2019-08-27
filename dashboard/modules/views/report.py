@@ -1,36 +1,29 @@
 import pyrebase
 from django.conf import settings
-from django.http import HttpResponseRedirect, JsonResponse
+from django.http import JsonResponse
 from django.shortcuts import render
-from django.urls import reverse
 from django.views import View
-from firebasedata import LiveData
+from rest_framework.views import APIView
 
 firebase = pyrebase.initialize_app(settings.FIREBASE_CONFIG)
 
 auth = firebase.auth()
 db = firebase.database()
-#
-# live = LiveData(firebase, '/my_data')
-#
-# data = live.get_data()
-# all_data = data.get()
-# sub_data = data.get('my/sub/path')
-#
-#
-# def my_handler(data):
-#   print(data)
+
 
 def noquote(s):
   return s
 
+
 pyrebase.pyrebase.quote = noquote
+
 
 class DashboardReportView(View):
   def get(self, request, *args, **kwargs):
     firebase_reports = db.child('Reports').get()
+    firebase_reports_by_date = db.sort(firebase_reports, "DateTime")
     reports = {}
-    for report in firebase_reports.each():
+    for report in firebase_reports_by_date.each():
       reports[report.key()] = report.val()
 
     context = {
@@ -40,6 +33,7 @@ class DashboardReportView(View):
     }
 
     return render(request, 'dashboard/reports/home.html', context)
+
 
 class DashboardReportDetailView(View):
   def get(self, request, *args, **kwargs):
@@ -53,3 +47,14 @@ class DashboardReportDetailView(View):
     }
 
     return render(request, 'dashboard/reports/detail.html', context)
+
+
+class DashboardReportApi(APIView):
+  def get(self, request, *args, **kwargs):
+    firebase_reports = db.child('Reports').get()
+    firebase_reports_by_date = db.sort(firebase_reports, "DateTime")
+    reports = {}
+    for report in firebase_reports_by_date.each():
+      reports[report.key()] = report.val()
+
+    return JsonResponse(reports)
