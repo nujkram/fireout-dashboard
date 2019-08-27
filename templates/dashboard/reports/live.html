@@ -15,7 +15,7 @@
       </div>
       <div class="col-md-6 col-sm-12">
         <audio controls id="player" class="float-right">
-          <source id="player-src" src="{% static 'audio/fire_alarm.mp3' %}">
+          <source id="player-src" src="{% static 'audio/alert_1.mp3' %}">
         </audio>
       </div>
     </div>
@@ -56,7 +56,7 @@
           success: function (data) {
             var currentReportCount = document.getElementById('report-count');
             var reportCount = Object.keys(data).length;
-            var soundSrc = "{% static 'audio/fire_alarm.mp3' %}";
+            var soundSrc = "{% static 'audio/alert_1.mp3' %}";
             let lastKey;
             // Check if a new report was added by comparing previous record count to the latest count
             if (currentReportCount.textContent.toString() !== reportCount.toString()) {
