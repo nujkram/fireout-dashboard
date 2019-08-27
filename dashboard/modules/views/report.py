@@ -21,9 +21,8 @@ pyrebase.pyrebase.quote = noquote
 class DashboardReportView(View):
   def get(self, request, *args, **kwargs):
     firebase_reports = db.child('Reports').get()
-    firebase_reports_by_date = db.sort(firebase_reports, "DateTime")
     reports = {}
-    for report in firebase_reports_by_date.each():
+    for report in firebase_reports.each():
       reports[report.key()] = report.val()
 
     context = {
@@ -52,9 +51,8 @@ class DashboardReportDetailView(View):
 class DashboardReportApi(APIView):
   def get(self, request, *args, **kwargs):
     firebase_reports = db.child('Reports').get()
-    firebase_reports_by_date = db.sort(firebase_reports, "DateTime")
     reports = {}
-    for report in firebase_reports_by_date.each():
+    for report in firebase_reports.each():
       reports[report.key()] = report.val()
 
     return JsonResponse(reports)
