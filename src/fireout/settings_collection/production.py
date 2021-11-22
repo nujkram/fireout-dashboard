@@ -29,7 +29,7 @@ DEBUG = False
 ALLOWED_HOSTS = ['*']
 
 SITE_ID = 1
-SITE_URL = 'http://192.168.33.30:8000'
+SITE_URL = 'https://fireout.anemone.eu.org'
 
 # DEBUGTOOLBAR
 
@@ -96,10 +96,14 @@ WSGI_APPLICATION = 'fireout.wsgi.application'
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
 DATABASES = {
-  'default': {
-    'ENGINE': 'django.db.backends.sqlite3',
-    'NAME': os.path.join(BASE_DIR, '../../db.sqlite3'),
-  }
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'postgres',
+        'USER': 'postgres',
+        'PASSWORD': 'postgres',
+        'HOST': 'db',
+        'PORT': 5432,
+    }
 }
 
 # Password validation
@@ -139,10 +143,10 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static")
 ]
 
-STATIC_URL = 'http://192.168.33.30/static/'
+STATIC_URL = 'https://fireout.anemone.eu.org/static/'
 STATIC_ROOT = '/var/www/html/static/'
 
-MEDIA_URL = 'http://192.168.33.30/media/'
+MEDIA_URL = 'https://fireout.anemone.eu.org/media/'
 MEDIA_ROOT = '/var/www/html/media/'
 
 # firebase
