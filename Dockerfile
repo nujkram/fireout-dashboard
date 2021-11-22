@@ -16,3 +16,6 @@ WORKDIR /app
 COPY ./src/requirements.txt requirements.txt
 RUN python -m pip install --no-cache-dir -r requirements.txt
 COPY ./src /app/
+
+RUN chmod +x /app/entrypoint.sh
+ENTRYPOINT ["/app/entrypoint.sh"]
