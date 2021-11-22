@@ -4,15 +4,33 @@ services:
   db:
     image: postgres
     volumes:
-      - ./data:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data
     environment:
       - POSTGRES_DB=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
   web:
-    image: fireout:latest
+    build: .
     command: python3.6 manage.py runserver 0.0.0.0:8000
-    ports:
-      - "127.0.0.1:8083:8000"
+    volumes:
+      - ./test-server.env:/app/test-server.env
+      - static_volume:/var/www/html/static/
+      - media_volume:/var/www/html/media/
     depends_on:
       - db
+    expose:
+      - 8000
+  nginx:
+    build: ./nginx
+    volumes:
+      - static_volume:/var/www/html/static/
+      - media_volume:/var/www/html/media/
+    ports:
+      - 127.0.0.1:8080:80
+    depends_on:
+      - web
+
+volumes:
+  postgres_data:
+  static_volume:
+  media_volume:
