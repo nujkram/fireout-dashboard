@@ -20,8 +20,7 @@ RUN python -m pip install wheel
 RUN python -m pip install incremental
 RUN python -m pip install --no-cache-dir -r requirements.txt
 
-RUN chown -R app:app /app
-RUN chmod +x /app/entrypoint.sh
+RUN chown -R app:app $APP_HOME
 
 USER app
 
