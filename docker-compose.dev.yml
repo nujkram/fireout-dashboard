@@ -13,7 +13,7 @@ services:
     build: .
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
-      - ./test-server.env:/app/test-server.env
+      - ./dev.env:/app/dev.env
       - static_volume:/var/www/html/static/
       - media_volume:/var/www/html/media/
     depends_on:
