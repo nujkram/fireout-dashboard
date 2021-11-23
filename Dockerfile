@@ -1,12 +1,12 @@
 FROM python:3.6-slim
 
-RUN apt-get update && apt-get install -y build-essential
+RUN apt-get update && apt-get install -y build-essential netcat
 
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED=1
 
 RUN mkdir -p /home/app
-RUN useradd --user-group --shell /bin/bash app
+RUN useradd --user-group --shell /bin/false app
 ENV HOME=/home/app
 ENV APP_HOME=/home/app/web
 RUN mkdir $APP_HOME
@@ -24,4 +24,4 @@ RUN chown -R app:app $APP_HOME
 
 USER app
 
-ENTRYPOINT ["/app/entrypoint.sh"]
+ENTRYPOINT ["/home/app/web/entrypoint.sh"]
