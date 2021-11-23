@@ -10,3 +10,7 @@ dashboard/modules/views/__pycache__/
 fireout/__pycache__/
 
 helpers/__pycache__/
+
+dev.env
+
+prod.env
