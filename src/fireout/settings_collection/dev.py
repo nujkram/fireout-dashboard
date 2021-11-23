@@ -21,15 +21,15 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'z-3i1^rothz+@hlgaozroj$kbgh2%)1xl$zw#w3e351y3)yw%6'
+SECRET_KEY = os.environ.get("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = int(os.environ.get("DEBUG", default=0))
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
 
 SITE_ID = 1
-SITE_URL = 'http://localhost:8080'
+SITE_URL = os.environ.get("SITE_URL")
 
 # DEBUGTOOLBAR
 
@@ -96,13 +96,13 @@ WSGI_APPLICATION = 'fireout.wsgi.application'
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
-        'USER': 'postgres',
-        'PASSWORD': 'postgres',
-        'HOST': 'db',
-        'PORT': 5432,
+    "default": {
+        "ENGINE": os.environ.get("SQL_ENGINE"),
+        "NAME": os.environ.get("SQL_DATABASE"),
+        "USER": os.environ.get("SQL_USER"),
+        "PASSWORD": os.environ.get("SQL_PASSWORD"),
+        "HOST": os.environ.get("SQL_HOST"),
+        "PORT": os.environ.get("SQL_PORT"),
     }
 }
 
@@ -143,22 +143,20 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static")
 ]
 
-STATIC_URL = 'http://localhost:8080/static/'
-STATIC_ROOT = '/var/www/html/static/'
+STATIC_URL = os.environ.get("STATIC_URL")
+STATIC_ROOT = os.environ.get("STATIC_ROOT")
 
-MEDIA_URL = 'http://localhost:8080/media/'
-MEDIA_ROOT = '/var/www/html/media/'
+MEDIA_URL = os.environ.get("MEDIA_URL")
+MEDIA_ROOT = os.environ.get("MEDIA_ROOT")
 
 # firebase
 FIREBASE_CONFIG = {
-    'apiKey': 'AIzaSyBcrTQnvu9pwY-o3vQLTnUq42tWQLCOmD4 ',
-    'authDomain': 'https://fireout-7e5dc.firebaseapp.com',
-    'databaseURL': 'https://fireout-7e5dc.firebaseio.com',
-    'projectId': 'fireout-7e5dc',
-    'storageBucket': 'fireout-7e5dc.appspot.com',
+    'apiKey': os.environ.get("FIREBASE_APIKEY"),
+    'authDomain': os.environ.get("FIREBASE_AUTHDOMAIN"),
+    'databaseURL': os.environ.get("FIREBASE_DATABASEURL"),
+    'projectId': os.environ.get("FIREBASE_PROJECTID"),
+    'storageBucket': os.environ.get("FIREBASE_STORAGEBUCKET"),
     # 'messagingSenderId': '',
 }
-
-
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'

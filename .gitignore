@@ -1,16 +1,10 @@
-
 .idea/
 
-dashboard/__pycache__/
-
-dashboard/modules/__pycache__/
-
-dashboard/modules/views/__pycache__/
-
-fireout/__pycache__/
-
-helpers/__pycache__/
+src/dashboard/__pycache__/
+src/dashboard/modules/__pycache__/
+src/dashboard/modules/views/__pycache__/
+src/fireout/__pycache__/
+src/helpers/__pycache__/
 
 dev.env
-
 prod.env

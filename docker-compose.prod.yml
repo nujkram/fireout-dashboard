@@ -4,14 +4,14 @@ services:
   db:
     image: postgres
     volumes:
-      - postgres_data_dev:/var/lib/postgresql/data
+      - postgres_data_prod:/var/lib/postgresql/data
     environment:
-      - POSTGRES_DB=postgres_dev
+      - POSTGRES_DB=postgres_prod
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
   web:
     build: .
-    command: python manage.py runserver 0.0.0.0:8000
+    command: gunicorn fireout.wsgi:application --bind 0.0.0.0:8000
     volumes:
       - static_volume:/var/www/html/static/
       - media_volume:/var/www/html/media/
@@ -20,7 +20,7 @@ services:
     expose:
       - 8000
     env_file:
-      - ./dev.env
+      - ./prod.env
   nginx:
     build: ./nginx
     volumes:
@@ -32,6 +32,6 @@ services:
       - web
 
 volumes:
-  postgres_data_dev:
+  postgres_data_prod:
   static_volume:
   media_volume:
