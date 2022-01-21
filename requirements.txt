@@ -37,7 +37,7 @@ FirebaseData
 gunicorn==19.9.0
 humanize==0.5.1
 idna==2.6
-ipython==7.2.0
+ipython==7.16.3
 ipython-genutils==0.2.0
 isodate==0.6.0
 itypes==1.1.0
