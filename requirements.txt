@@ -48,7 +48,7 @@ MarkupSafe==1.1.1
 mpld3==0.3
 msrest==0.6.6
 msrestazure==0.6.0
-numpy==1.15.1
+numpy==1.22.0
 oauthlib==2.0.6
 pandas==0.23.4
 parso==0.3.1
